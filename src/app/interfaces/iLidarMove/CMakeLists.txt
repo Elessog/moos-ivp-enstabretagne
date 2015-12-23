@@ -2,7 +2,6 @@
 # The CMakeLists.txt for:                       iLidarMove
 # Author(s):                              
 #--------------------------------------------------------
-
 SET(SRC
   LidarMove.cpp
   LidarMove_Info.cpp
@@ -46,7 +45,7 @@ ADD_EXECUTABLE(iLidarMove ${SRC})
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/API_DYNAMIXEL/include
                     ${CMAKE_CURRENT_SOURCE_DIR}/API_LIDAR_LITE/include
  )
-
+add_dependencies(iLidarMove  api_lidar_clean api_servo_clean api_dynam_clean api_dynam_build api_servo_build api_lidar_build )
 
 TARGET_LINK_LIBRARIES(iLidarMove
    ${MOOS_LIBRARIES}

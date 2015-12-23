@@ -16,12 +16,12 @@ int gbCommStatus = COMM_RXSUCCESS;
 int giBusUsing = 0;
 
 
-int dxl_initialize(int deviceIndex, int baudnum )
+int dxl_initialize(const char *deviceUrl, int baudnum )
 {
 	float baudrate;	
 	baudrate = 2000000.0f / (float)(baudnum + 1);
 
-	if( dxl_hal_open(deviceIndex, baudrate) == 0 )
+	if( dxl_hal_open(deviceUrl, baudrate) == 0 )
 		return 0;
 
 	gbCommStatus = COMM_RXSUCCESS;

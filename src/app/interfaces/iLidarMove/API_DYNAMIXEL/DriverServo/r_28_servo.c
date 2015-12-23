@@ -13,10 +13,10 @@
 
 void setMovement(int servo_id,const int angleMin,const int angleMax);//private function
 
-int open_USB2Dyn(const int baudnum,const int deviceIndex){
+int open_USB2Dyn(const int baudnum,const char* deviceIndex){
      if( dxl_initialize(deviceIndex, baudnum) == 0 )
 	{
-		printf( "Failed to open USB2Dynamixel!\n" );
+		printf( "Failed to open USB2Dynamixel! : ,%s\n",deviceIndex );
 		return 0;
 	}
 	else

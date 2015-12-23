@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file contains iLidarMove documentation -->
-<?xml-stylesheet href="../../../../doc/xmldocumentation.css" type="text/css"?>
+<?xml-stylesheet href="../../../doc/xmldocumentation.css" type="text/css"?>
 <xmldoc>
   <moosapp>
 
@@ -25,22 +25,28 @@ an Arduino board with a serial port.
           Angle_max = [0,1023] maximum angle of rotation for the servo
           If the lidar look front the angle is 0° and correspond to 512. 0 is -150 and 1023 is 150. Max should be higher than min. The servo will rotationate between those two values. 
           
-          Index_servo number for the url of the serial port of servo as in /dev/ttyUSBX
+          URL_SERVO url of the serial port of USB2Dynamixel (connected to the servo) as in /dev/ttyUSBX
           URL_LIDAR  URl of the serial port with the arduino connected to the lidar
           Servo_Id = [1-255] as you can put more than one RX-28 servo motor linked you need an id to give order to the servo can be change by managing the servo via the Windows program from Dynamixel
           Servo_speed = [0-1023] set the speed of the rotation of the servo from 0 rpm to around 117 rpm (depend also of the load on the servo);  
+          DEBUG print and write time distance and angle
         </synopsis>
         <interface>
            <publications>
               <moosvar>
                  <varname>LIDAR_DISTANCE</varname>
                  <vartype>int</vartype>
-                 <varinfo>distance of the detected object</varinfo>
+                 <varinfo>distance of the detected object: 1 meter = 1000</varinfo>
               </moosvar>
               <moosvar>
                  <varname>LIDAR_ANGLE</varname>
                  <vartype>double</vartype>
                  <varinfo>bearing (relative to servo) of the object</varinfo>
+              </moosvar>
+              <moosvar>
+                 <varname>LIDAR_DIST_ANGLE</varname>
+                 <vartype>double</vartype>
+                 <varinfo>bearing (relative to servo) of the object mixte with the distance of the object = LIDAR_ANGLE*10000+LIDAR_ANGLE where LIDAR_ANGLE [0-1023] for [-150°,+150°]. When the LIDAr bug and return -1 there is no notification</varinfo>
               </moosvar>
            </publications>
         </interface>
@@ -50,8 +56,7 @@ an Arduino board with a serial port.
         </optional-comments>
         <!-- if something can be improved -->
         <suggested-improvements>
-           Joint the ANGLE and DISTANCE to assure synchronization upon reading of those DATA.
-           Change Dynamixel library to put URL instead of number in order to indicate serial port of the servo motor. 
+          
         </suggested-improvements>
      </documentation>
 

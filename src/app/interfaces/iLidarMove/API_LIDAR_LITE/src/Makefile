@@ -12,7 +12,7 @@ AR			= ar
 
 $(TARGET): $(OBJS)
 	$(AR) rs $@ $^
-	cp $(TARGET) ../../lib
+	cp $(TARGET) ../lib
 .c.o:
 	$(CC) -c $< $(CFLAGS)
 	

@@ -48,7 +48,7 @@ void PrintCommStatus(const int CommStatus);
 void PrintErrorCode(void);
 
 //manage USB2dynamixel
-int open_USB2Dyn(const int baudnum,const int deviceIndex);
+int open_USB2Dyn(const int baudnum,const char* deviceIndex);
 void close_USB2Dyn();
 
 //servo function

@@ -101,14 +101,21 @@ bool LidarMove::Iterate()
   
   double angle = angle_i*(300/1024.0)-150;
 
-  if (m_Debug)
+  if (m_Debug){
       printf("%f , %f , %d\n",tempsSystem,angle,lidar_value);
-  fichier.precision(15);
-  fichier << tempsSystem << ',' <<lidar_value <<  ',' << angle << endl;
-  fichier.flush();
-
-  Notify("LIDAR_DISTANCE", lidar_value);
-  Notify("LIDAR_ANGLE", angle);
+      fichier.precision(15);
+      fichier << tempsSystem << ',' <<lidar_value <<  ',' << angle << endl;
+      fichier.flush();
+  }
+  if (!m_mixte_notif)
+  {
+    Notify("LIDAR_DISTANCE", lidar_value);
+    Notify("LIDAR_ANGLE", angle);
+  }
+  else if (lidar_value!=-1) //when coupled we don't notify the data
+  {
+    Notify("LIDAR_DIST_ANGLE",lidar_value*10000+angle_i);
+  }
   AppCastingMOOSApp::PostReport();
   return(true);
 }
@@ -130,7 +137,7 @@ bool LidarMove::OnStartUp()
   m_AngleMax = 666;
   m_ModeMove = 0;//0 angle by angle 1 fast
   m_ModeComLidar=0;//0 pwm
-  m_IndexServo = 0;
+  m_UrlServo = "/dev/ttyUSB0";
   m_UrlLidar = "/dev/ttyACM0";
   m_ServoId = 1;
   m_BaudrateLidar=112500;
@@ -172,9 +179,9 @@ bool LidarMove::OnStartUp()
       if (!(handled = !(m_ModeComLidar > 1|| m_ModeComLidar <0)))
          printf("ModeComLidar not  0-1\n");
     }
-    else if(param == "INDEX_SERVO") {
+    else if(param == "URL_SERVO") {
       handled = true;
-      m_IndexServo = atoi(value.c_str());
+      m_UrlServo = value.c_str();
     }
     else if(param == "URL_LIDAR") {
       handled = true;
@@ -200,27 +207,32 @@ bool LidarMove::OnStartUp()
       handled = true;
       m_ServoSpeed = atoi(value.c_str());
     }
+    else if(param == "MIXTE_NOTIF") {
+      handled = true;
+      m_mixte_notif = atoi(value.c_str()) == 1;
+    }
 
     if(!handled)
       reportUnhandledConfigWarning(orig);
 
   }
+  if (m_Debug){
+    std::string filepath = "./test_ilidar.txt";
 
-  std::string filepath = "/home/elessog/data/test.txt";
-
-  fichier.open(filepath.c_str(), ios::out | ios::trunc);
-  if(!fichier)
-  {
-    cerr << "File could not be openned" << endl;
-    exit(1);
+    fichier.open(filepath.c_str(), ios::out | ios::trunc);
+    if(!fichier)
+    {
+      cerr << "File could not be openned" << endl;
+      exit(1);
+    }
   }
-  
   registerVariables();	
   m_GoalPos[0] = m_AngleMin;
   m_GoalPos[1] = m_AngleMax;
-  open_USB2Dyn(m_BaudrateServo,m_IndexServo);//servo
+  open_USB2Dyn(m_BaudrateServo,m_UrlServo.c_str());//servo
   start_serial(m_BaudrateLidar,m_UrlLidar.c_str());//lidar
   setSpeed(m_ServoId,m_ServoSpeed);
+
   return(true);
 }
 

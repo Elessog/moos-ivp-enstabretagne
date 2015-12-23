@@ -16,20 +16,20 @@ float	gfByteTransTime	= 0.0f;
 
 char	gDeviceName[20];
 
-int dxl_hal_open(int deviceIndex, float baudrate)
+int dxl_hal_open(const char * deviceUrl, float baudrate)
 {
 	struct termios newtio;
 	struct serial_struct serinfo;
-	char dev_name[100] = {0, };
+	//char dev_name[100] = {0, };
 
-	sprintf(dev_name, "/dev/ttyUSB%d", deviceIndex);
+	//sprintf(dev_name, "/dev/ttyUSB%d", deviceIndex);
 
-	strcpy(gDeviceName, dev_name);
+	strcpy(gDeviceName, deviceUrl);
 	memset(&newtio, 0, sizeof(newtio));
 	dxl_hal_close();
 	
 	if((gSocket_fd = open(gDeviceName, O_RDWR|O_NOCTTY|O_NONBLOCK)) < 0) {
-		fprintf(stderr, "device open error: %s\n", dev_name);
+		fprintf(stderr, "device open error: %s\n", deviceUrl);
 		goto DXL_HAL_OPEN_ERROR;
 	}
 
@@ -64,12 +64,12 @@ int dxl_hal_open(int deviceIndex, float baudrate)
 	
 	gfByteTransTime = (float)((1000.0f / baudrate) * 12.0f);
 	
-	strcpy(gDeviceName, dev_name);
+	strcpy(gDeviceName, deviceUrl);
 	memset(&newtio, 0, sizeof(newtio));
 	dxl_hal_close();
 	
 	if((gSocket_fd = open(gDeviceName, O_RDWR|O_NOCTTY|O_NONBLOCK)) < 0) {
-		fprintf(stderr, "device open error: %s\n", dev_name);
+		fprintf(stderr, "device open error: %s\n",deviceUrl);
 		goto DXL_HAL_OPEN_ERROR;
 	}
 

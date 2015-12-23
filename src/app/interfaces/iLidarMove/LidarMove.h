@@ -36,11 +36,12 @@ class LidarMove : public AppCastingMOOSApp
    std::string m_UrlServo;
    std::string m_UrlLidar;
    int m_ServoId;
-   int m_IndexServo;
+   //int m_IndexServo;
    int m_BaudrateLidar;
    int m_BaudrateServo;
    bool m_Debug;
    int m_ServoSpeed;
+   bool m_mixte_notif;
  private: // State variables
    int m_GoalPos[2];
    int m_index;

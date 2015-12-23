@@ -1,6 +1,6 @@
 //##########################################################
 //##                      ENSTA Bretagne                  ##
-//##     Code to discuss with teensy with lidarliteV1     ##
+//##     Code to discuss with Arduino with lidarliteV1    ##
 //##                                           2015.11.02 ##
 //##########################################################
 #include <stdio.h>
